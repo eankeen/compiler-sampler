@@ -1,0 +1,35 @@
+{
+  "name": "vendor_lib_dll_8ef3bb31ccc661641c79",
+  "content": {
+    "./node_modules/.pnpm/registry.npmjs.org/@babel/plugin-transform-modules-systemjs/7.9.6/node_modules/@babel/plugin-transform-modules-systemjs/lib/index.js": {
+      "id": "./node_modules/.pnpm/registry.npmjs.org/@babel/plugin-transform-modules-systemjs/7.9.6/node_modules/@babel/plugin-transform-modules-systemjs/lib/index.js",
+      "buildMeta": {
+        "providedExports": true
+      }
+    },
+    "./node_modules/.pnpm/registry.npmjs.org/@babel/preset-env/7.9.6/node_modules/@babel/preset-env/lib/index.js": {
+      "id": "./node_modules/.pnpm/registry.npmjs.org/@babel/preset-env/7.9.6/node_modules/@babel/preset-env/lib/index.js",
+      "buildMeta": {
+        "providedExports": true
+      }
+    },
+    "./node_modules/.pnpm/registry.npmjs.org/@babel/preset-flow/7.9.0/node_modules/@babel/preset-flow/lib/index.js": {
+      "id": "./node_modules/.pnpm/registry.npmjs.org/@babel/preset-flow/7.9.0/node_modules/@babel/preset-flow/lib/index.js",
+      "buildMeta": {
+        "providedExports": true
+      }
+    },
+    "./node_modules/.pnpm/registry.npmjs.org/@babel/preset-react/7.9.4/node_modules/@babel/preset-react/lib/index.js": {
+      "id": "./node_modules/.pnpm/registry.npmjs.org/@babel/preset-react/7.9.4/node_modules/@babel/preset-react/lib/index.js",
+      "buildMeta": {
+        "providedExports": true
+      }
+    },
+    "./node_modules/.pnpm/registry.npmjs.org/@babel/preset-typescript/7.9.0/node_modules/@babel/preset-typescript/lib/index.js": {
+      "id": "./node_modules/.pnpm/registry.npmjs.org/@babel/preset-typescript/7.9.0/node_modules/@babel/preset-typescript/lib/index.js",
+      "buildMeta": {
+        "providedExports": true
+      }
+    }
+  }
+}

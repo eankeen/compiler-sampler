@@ -2,8 +2,8 @@
   <div class="home">
     <main class="input-output-parent">
       <!-- <div class="input"> -->
-        <div id="input-monaco" @keyup="babelTransform"></div>
-        <!-- <textarea v-model="babelState.inputText"  name="input">let a = 4</textarea> -->
+      <div id="input-monaco" @keyup="babelTransform"></div>
+      <!-- <textarea v-model="babelState.inputText"  name="input">let a = 4</textarea> -->
       <!-- </div> -->
       <div class="output">
         <textarea v-model="babelState.transformedText" name="output"></textarea>
@@ -16,27 +16,28 @@
 
 <script>
 /* eslint-disable */
-import { editor } from 'monaco-editor'
-import { state } from '../state'
-import { mapGetters, mapMutations, mapActions} from 'vuex'
-import { reactive, computed, onCreated, onMounted } from 'vue'
-import * as babel from '@babel/core'
-import pluginTransformModulesCommonjs from '@babel/plugin-transform-modules-commonjs'
-import pluginTransformSpread from '@babel/plugin-transform-spread'
+import { editor } from "monaco-editor";
+import { state } from "../state";
+import { mapGetters, mapMutations, mapActions } from "vuex";
+import { reactive, computed, onCreated, onMounted } from "vue";
+import * as babel from "@babel/core";
+import pluginTransformModulesCommonjs from "@babel/plugin-transform-modules-commonjs";
+import pluginTransformSpread from "@babel/plugin-transform-spread";
 
-let editor3
+let editor3;
 
 export default {
-  name: 'Home',
+  name: "Home",
   mounted() {
-    const input = document.getElementById('input-monaco')
+    const input = document.getElementById("input-monaco");
     const editor2 = editor.create(input, {
-      value: "function hello() {\n\talert('Hello world!');\n}",
+      value:
+        "import { foo } from './bar'\n\nfunction hello() {\n  alert('Hello world!');\n}",
       language: "javascript"
     });
-    console.log(editor2)
-    console.log(editor2.getValue())
-    editor3 = editor2
+    console.log(editor2);
+    console.log(editor2.getValue());
+    editor3 = editor2;
   },
   setup() {
     // onCreated(() => {
@@ -50,45 +51,47 @@ export default {
 
     const babelState = reactive({
       inputText: "import eeee from 'p'",
-      transformedText: 'pre',
+      transformedText: "pre",
       isErrorOnTransform: false,
       errorText: null
-    })
+    });
 
     function babelTransform() {
-      console.log(editor3.getValue())
-      babelState.inputText = editor3.getValue()
+      console.log(editor3.getValue());
+      babelState.inputText = editor3.getValue();
 
-      const plugins = []
-      if (state.pluginToLoad === 'plugin-transform-modules-commonjs') {
-        plugins.push(pluginTransformModulesCommonjs)
-      } else if (state.pluginToLoad === 'plugin-transform-spread') {
-        plugins.push(pluginTransformSpread)
+      const plugins = [];
+      if (state.pluginToLoad === "@babel/plugin-transform-modules-commonjs") {
+        plugins.push(pluginTransformModulesCommonjs);
+      } else if (state.pluginToLoad === "@babel/plugin-transform-spread") {
+        plugins.push(pluginTransformSpread);
       }
       (async () => {
         try {
-          console.log(state)
-          const { code, map, ast } = await babel.transformAsync(babelState.inputText, {
-            plugins
-          })
-          babelState.isErrorOnTransform = false
-          babelState.transformedText = code
+          console.log(state);
+          const { code, map, ast } = await babel.transformAsync(
+            babelState.inputText,
+            {
+              plugins
+            }
+          );
+          babelState.isErrorOnTransform = false;
+          babelState.transformedText = code;
         } catch (err) {
           // error with parsing
-          babelState.isErrorOnTransform = true
-          console.log('parsing error')
-          babelState.errorText = err
+          babelState.isErrorOnTransform = true;
+          console.log("parsing error");
+          babelState.errorText = err;
         }
-
-      })()
+      })();
     }
 
     return {
       babelState,
       babelTransform
-    }
+    };
   }
-}
+};
 </script>
 
 <style lang="scss" scoped>
@@ -99,7 +102,6 @@ export default {
 }
 
 .input {
-
 }
 
 .input-monaco {
@@ -107,7 +109,6 @@ export default {
   width: 100%;
 }
 .output {
-
 }
 
 textarea {

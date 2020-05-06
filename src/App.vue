@@ -1,45 +1,141 @@
 <template>
   <div id="app">
     <nav id="nav">
-      <router-link to="/">Home</router-link>
-      <select name="language">
-        <option value="javascript">Javascript</option>
-        <option value="typescript">Typescript</option>
-        <option value="reasonml">ReasonML</option>
-      </select>
-      <select @change="choosePlugin" name="select" id="option">
-        <option value="plugin-transform-modules-commonjs">transform-modules-commonjs</option>
-        <option value="plugin-transform-spread">transform-spread</option>
-      </select>
+      <div class="controls">
+        <router-link class="title" to="/">Compiler</router-link>
+        <select name="language" @change="changeCurrentLanguage">
+          <option
+            v-for="language in Object.keys(supportedLanguages)"
+            :key="language"
+            :value="language"
+            >{{ supportedLanguages[language].displayName }}</option
+          >
+        </select>
+        <select name="variant" @change="choosePlugin">
+          <!-- <optgroup v-for="languageVariants in supportedLanguages[currentLanguage].variants" :key="languageVariants" :label="supportedLanguages[currentLanguage]"> -->
+          <optgroup
+            v-for="[languageVariantType, languageVariantList] in Object.entries(
+              supportedLanguages[currentLanguage].variants
+            )"
+            :key="languageVariantType"
+            :label="languageVariantType"
+          >
+            <option
+              v-for="languageVariant in languageVariantList"
+              :key="languageVariant"
+              >{{ languageVariant }}</option
+            >
+          </optgroup>
+        </select>
+      </div>
     </nav>
-    <router-view/>
+    <router-view />
   </div>
 </template>
 
 <script>
 /* eslint-disable */
-import { state } from './state'
-import { mapGetters, mapMutations } from 'vuex'
+import { reactive, ref } from "vue";
+import { state } from "./state";
+import { mapGetters, mapMutations } from "vuex";
 export default {
-  name: 'App',
+  name: "App",
   setup() {
     function choosePlugin(ev) {
-      const pluginToLoad = ev.target.value
+      const pluginToLoad = ev.target.value;
       // TODO: fix
-      state.pluginToLoad = pluginToLoad
+      console.log(pluginToLoad);
+      state.pluginToLoad = pluginToLoad;
     }
 
-    return {
-      choosePlugin
+    const currentLanguage = ref("javascript");
+    function changeCurrentLanguage(ev) {
+      console.log("test", ev.target.value);
+      const newLanguage = ev.target.value;
+      currentLanguage.value = newLanguage;
     }
+    const supportedLanguages = reactive({
+      javascript: {
+        displayName: "JavaScript",
+        variants: {
+          presets: [
+            "@babel/preset-env",
+            "@babel/preset-flow",
+            "@babel/preset-react",
+            "@babel/preset-typescript"
+          ],
+          plugins: [
+            "@babel/plugin-transform-modules-commonjs",
+            "@babel/plugin-proposal-nullish-coalescing-operator",
+            "@babel/plugin-proposal-numeric-separator",
+            "@babel/plugin-proposal-optional-chaining"
+          ]
+        }
+      },
+      typescript: {
+        displayName: "TypeScript",
+        variants: {
+          default: ["default"]
+        }
+      },
+      postcss: {
+        displayName: "PostCSS",
+        variants: {
+          presets: ["postcss-preset-env"],
+          plugins: [
+            "autoprefixer",
+            "postcss-attribute-case-insensitive",
+            "postcss-color-functional-notation",
+            "postcss-color-gray",
+            "postcss-color-hex-alpha",
+            "postcss-color-mod-function",
+            "postcss-color-rebeccapurple",
+            "postcss-custom-media",
+            "postcss-custom-properties",
+            "postcss-custom-selectors",
+            "postcss-dir-pseudo-class",
+            "postcss-double-position-gradients",
+            "postcss-env-function",
+            "postcss-focus-visible",
+            "postcss-focus-within",
+            "postcss-font-variant",
+            "postcss-gap-properties",
+            "postcss-image-set-function",
+            "postcss-initial",
+            "postcss-lab-function",
+            "postcss-logical",
+            "postcss-media-minmax",
+            "postcss-nesting",
+            "postcss-overflow-shorthand",
+            "postcss-page-break",
+            "postcss-place",
+            "postcsspseudo-class-any-link",
+            "postcss-replace-overflow-wrap",
+            "postcss-selector-matches",
+            "postcss-selector-not"
+          ]
+        }
+      }
+    });
+
+    return {
+      choosePlugin,
+      changeCurrentLanguage,
+      currentLanguage,
+      supportedLanguages
+    };
   }
-}
+};
 </script>
 
 <style lang="scss">
-@use 'styles/common.scss';
+@import "styles/common.scss";
 
-* {
+*,
+*::before,
+*::after {
+  color: $oc-gray-9;
+  background: $oc-gray-0;
   padding: 0;
   margin: 0;
   border: 0 none;
@@ -51,12 +147,17 @@ export default {
   -moz-osx-font-smoothing: grayscale;
 }
 
+.title {
+  margin: 4px;
+}
+
 select {
-  margin: 6px 8px;
   padding: 6px 10px;
+  border: 1px solid $oc-gray-9;
+  border-radius: 2px;
+  margin: 2px;
 }
 
 option {
-
 }
 </style>
