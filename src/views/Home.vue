@@ -1,30 +1,53 @@
 <template>
   <div class="home">
     <main class="input-output-parent">
-      <div class="input">
-        <textarea v-model="babelState.inputText" @keyup="babelTransform" name="input">let a = 4</textarea>
-      </div>
+      <!-- <div class="input"> -->
+        <div id="input-monaco" @keyup="babelTransform"></div>
+        <!-- <textarea v-model="babelState.inputText"  name="input">let a = 4</textarea> -->
+      <!-- </div> -->
       <div class="output">
         <textarea v-model="babelState.transformedText" name="output"></textarea>
       </div>
     </main>
     <h2>error</h2>
     <p v-if="babelState.isErrorOnTransform">{{ babelState.errorText }}</p>
-    <button @click="babelTransform">transform</button>
   </div>
 </template>
 
 <script>
 /* eslint-disable */
-import { reactive, computed } from 'vue'
+import { editor } from 'monaco-editor'
+import { state } from '../state'
+import { mapGetters, mapMutations, mapActions} from 'vuex'
+import { reactive, computed, onCreated, onMounted } from 'vue'
 import * as babel from '@babel/core'
-import p from '@babel/plugin-transform-modules-commonjs'
-import p2 from '@babel/plugin-transform-spread'
+import pluginTransformModulesCommonjs from '@babel/plugin-transform-modules-commonjs'
+import pluginTransformSpread from '@babel/plugin-transform-spread'
+
+let editor3
 
 export default {
   name: 'Home',
+  mounted() {
+    const input = document.getElementById('input-monaco')
+    const editor2 = editor.create(input, {
+      value: "function hello() {\n\talert('Hello world!');\n}",
+      language: "javascript"
+    });
+    console.log(editor2)
+    console.log(editor2.getValue())
+    editor3 = editor2
+  },
   setup() {
-    // start
+    // onCreated(() => {
+
+    //   const input = document.getElementById('input')
+    //   editor.create(input, {
+    //     value: "function hello() {\n\talert('Hello world!');\n}",
+    //     language: "javascript"
+    //   });
+    // })
+
     const babelState = reactive({
       inputText: "import eeee from 'p'",
       transformedText: 'pre',
@@ -33,12 +56,20 @@ export default {
     })
 
     function babelTransform() {
+      console.log(editor3.getValue())
+      babelState.inputText = editor3.getValue()
+
+      const plugins = []
+      if (state.pluginToLoad === 'plugin-transform-modules-commonjs') {
+        plugins.push(pluginTransformModulesCommonjs)
+      } else if (state.pluginToLoad === 'plugin-transform-spread') {
+        plugins.push(pluginTransformSpread)
+      }
       (async () => {
         try {
+          console.log(state)
           const { code, map, ast } = await babel.transformAsync(babelState.inputText, {
-            plugins: [
-              p, p2
-            ]
+            plugins
           })
           babelState.isErrorOnTransform = false
           babelState.transformedText = code
@@ -71,6 +102,10 @@ export default {
 
 }
 
+.input-monaco {
+  height: 900px;
+  width: 100%;
+}
 .output {
 
 }

@@ -2,6 +2,11 @@
   <div id="app">
     <nav id="nav">
       <router-link to="/">Home</router-link>
+      <select name="language">
+        <option value="javascript">Javascript</option>
+        <option value="typescript">Typescript</option>
+        <option value="reasonml">ReasonML</option>
+      </select>
       <select @change="choosePlugin" name="select" id="option">
         <option value="plugin-transform-modules-commonjs">transform-modules-commonjs</option>
         <option value="plugin-transform-spread">transform-spread</option>
@@ -13,11 +18,15 @@
 
 <script>
 /* eslint-disable */
+import { state } from './state'
+import { mapGetters, mapMutations } from 'vuex'
 export default {
   name: 'App',
   setup() {
-    function choosePlugin() {
-      console.log('change')
+    function choosePlugin(ev) {
+      const pluginToLoad = ev.target.value
+      // TODO: fix
+      state.pluginToLoad = pluginToLoad
     }
 
     return {
@@ -28,10 +37,26 @@ export default {
 </script>
 
 <style lang="scss">
+@use 'styles/common.scss';
+
+* {
+  padding: 0;
+  margin: 0;
+  border: 0 none;
+}
+
 #app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
+  font-family: system-ui, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  color: #2c3e50;
+}
+
+select {
+  margin: 6px 8px;
+  padding: 6px 10px;
+}
+
+option {
+
 }
 </style>
