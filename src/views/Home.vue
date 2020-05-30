@@ -24,56 +24,62 @@ import { reactive, computed, onCreated, onMounted, ref } from "vue";
 import * as babel from "@babel/core";
 import pluginTransformModulesCommonjs from "@babel/plugin-transform-modules-commonjs";
 import pluginTransformSpread from "@babel/plugin-transform-spread";
+import pluginNumericSeparator from "@babel/plugin-proposal-numeric-separator";
+import presetEnv from "@babel/preset-env";
 
 let actualEditor
 
 export default {
   name: "Home",
   setup() {
-    onMounted(() => {
+    onMounted(async () => {
       const editorInput = document.getElementById('input-monaco')
       console.log(editorInput)
       actualEditor = editor.create(editorInput, {
         value: "import { foo } from './bar'\n\nconst a = 1_000;\n\nfunction hello() {\n  alert('Hello world!');\n}",
         language: "javascript"
       })
+      await babelTransform()
     })
 
     const babelState = reactive({
-      inputText: "import eeee from 'p'",
-      transformedText: "pre",
+      inputText: "'loading...'",
+      transformedText: "'loading...'",
       isErrorOnTransform: false,
       errorText: null
     });
 
-    function babelTransform() {
-      console.log(actualEditor.getValue());
+    async function babelTransform() {
       babelState.inputText = actualEditor.getValue();
 
+
       const plugins = [];
+      const presets = [];
       if (state.pluginToLoad === "@babel/plugin-transform-modules-commonjs") {
         plugins.push(pluginTransformModulesCommonjs);
       } else if (state.pluginToLoad === "@babel/plugin-transform-spread") {
         plugins.push(pluginTransformSpread);
       }
-      (async () => {
-        try {
-          console.log(state);
-          const { code, map, ast } = await babel.transformAsync(
-            babelState.inputText,
-            {
-              plugins
-            }
-          );
-          babelState.isErrorOnTransform = false;
-          babelState.transformedText = code;
-        } catch (err) {
-          // error with parsing
-          babelState.isErrorOnTransform = true;
-          console.log("parsing error");
-          babelState.errorText = err;
-        }
-      })();
+      plugins.push(pluginNumericSeparator)
+      console.log(plugins, presets)
+
+      try {
+        console.log(state);
+        const { code, map, ast } = await babel.transformAsync(
+          babelState.inputText,
+          {
+            plugins,
+            presets
+          }
+        );
+        babelState.isErrorOnTransform = false;
+        babelState.transformedText = code;
+      } catch (err) {
+        // error with parsing
+        babelState.isErrorOnTransform = true;
+        console.error("parsing error");
+        babelState.errorText = err;
+      }
     }
 
     return {
