@@ -44,15 +44,13 @@ import a from "vuex"
 export default {
   name: "App",
   setup() {
-    console.log('aaa', a)
     console.log(Store)
-    console.log(Store.getters.currentPluginToLoad)
+    console.log(Store.getters.pluginToLoad)
     console.log(Store.state.supportedLanguages)
 
     function choosePlugin(ev) {
       const pluginToLoad = ev.target.value;
       // TODO: fix
-      console.log(pluginToLoad);
       state.pluginToLoad = pluginToLoad;
     }
 
@@ -64,7 +62,7 @@ export default {
     }
     const supportedLanguages = reactive({
       javascript: {
-        displayName: "JavaScript",
+        displayName: "Babel",
         variants: {
           presets: [
             "@babel/preset-env",
