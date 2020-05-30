@@ -20,6 +20,7 @@ import { editor } from "monaco-editor";
 import { state } from "../state";
 import { mapGetters, mapMutations, mapActions } from "vuex";
 import { reactive, computed, onCreated, onMounted } from "vue";
+// TODO: fix dependencies and others (ex. regenerator-runtime)
 import * as babel from "@babel/core";
 import pluginTransformModulesCommonjs from "@babel/plugin-transform-modules-commonjs";
 import pluginTransformSpread from "@babel/plugin-transform-spread";
@@ -32,7 +33,7 @@ export default {
     const input = document.getElementById("input-monaco");
     const editor2 = editor.create(input, {
       value:
-        "import { foo } from './bar'\n\nfunction hello() {\n  alert('Hello world!');\n}",
+        "import { foo } from './bar'\n\nconst a = 1_000;\n\nfunction hello() {\n  alert('Hello world!');\n}",
       language: "javascript"
     });
     console.log(editor2);

@@ -2,7 +2,7 @@ const webpack = require('webpack')
 const MonacoWebpackPlugin = require('monaco-editor-webpack-plugin')
 const HtmlWebpackTagsPlugin = require('html-webpack-tags-plugin')
 
-const vendorManifest = require('./dll/dist/vendor-manifest.json')
+const vendorManifest = require('./dll/dist/vendor.manifest.json')
 
 module.exports = {
   configureWebpack: {
@@ -27,7 +27,7 @@ module.exports = {
     config.entry('app')
       .clear()
     config.entry('app')
-      // .add('./dll/dist/vendor.js')
+      // .add('./dll/dist/vendor.bundle.js')
       .add('./src/main.js')
   }
 }

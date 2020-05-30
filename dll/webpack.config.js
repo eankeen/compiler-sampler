@@ -20,14 +20,14 @@ export default {
   },
   output: {
     path: path.join(__dirname, 'dist'),
-    filename: 'vendor.js',
+    filename: 'vendor.bundle.js',
     library: 'vendor_lib_[name]_[hash]',
     libraryTarget: 'window'
   },
   plugins: [
     new webpack.DllPlugin({
       name: 'vendor_lib_[name]_[hash]',
-      path: path.resolve(__dirname, 'dist/vendor-manifest.json'),
+      path: path.resolve(__dirname, 'dist/vendor.manifest.json'),
       format: isDev,
       entryOnly: true
     }),
