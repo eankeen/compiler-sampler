@@ -37,10 +37,18 @@
 /* eslint-disable */
 import { reactive, ref } from "vue";
 import { state } from "./state";
-import { mapGetters, mapMutations } from "vuex";
+import Store from './store';
+import { useStore } from "vuex";
+import a from "vuex"
+
 export default {
   name: "App",
   setup() {
+    console.log('aaa', a)
+    console.log(Store)
+    console.log(Store.getters.currentPluginToLoad)
+    console.log(Store.state.supportedLanguages)
+
     function choosePlugin(ev) {
       const pluginToLoad = ev.target.value;
       // TODO: fix
