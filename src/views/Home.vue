@@ -19,36 +19,25 @@
 import { editor } from "monaco-editor";
 import { state } from "../state";
 import { mapGetters, mapMutations, mapActions } from "vuex";
-import { reactive, computed, onCreated, onMounted } from "vue";
+import { reactive, computed, onCreated, onMounted, ref } from "vue";
 // TODO: fix dependencies and others (ex. regenerator-runtime)
 import * as babel from "@babel/core";
 import pluginTransformModulesCommonjs from "@babel/plugin-transform-modules-commonjs";
 import pluginTransformSpread from "@babel/plugin-transform-spread";
 
-let editor3;
+let actualEditor
 
 export default {
   name: "Home",
-  mounted() {
-    const input = document.getElementById("input-monaco");
-    const editor2 = editor.create(input, {
-      value:
-        "import { foo } from './bar'\n\nconst a = 1_000;\n\nfunction hello() {\n  alert('Hello world!');\n}",
-      language: "javascript"
-    });
-    console.log(editor2);
-    console.log(editor2.getValue());
-    editor3 = editor2;
-  },
   setup() {
-    // onCreated(() => {
-
-    //   const input = document.getElementById('input')
-    //   editor.create(input, {
-    //     value: "function hello() {\n\talert('Hello world!');\n}",
-    //     language: "javascript"
-    //   });
-    // })
+    onMounted(() => {
+      const editorInput = document.getElementById('input-monaco')
+      console.log(editorInput)
+      actualEditor = editor.create(editorInput, {
+        value: "import { foo } from './bar'\n\nconst a = 1_000;\n\nfunction hello() {\n  alert('Hello world!');\n}",
+        language: "javascript"
+      })
+    })
 
     const babelState = reactive({
       inputText: "import eeee from 'p'",
@@ -58,8 +47,8 @@ export default {
     });
 
     function babelTransform() {
-      console.log(editor3.getValue());
-      babelState.inputText = editor3.getValue();
+      console.log(actualEditor.getValue());
+      babelState.inputText = actualEditor.getValue();
 
       const plugins = [];
       if (state.pluginToLoad === "@babel/plugin-transform-modules-commonjs") {
